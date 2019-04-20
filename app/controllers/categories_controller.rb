@@ -46,7 +46,7 @@ class CategoriesController < ApplicationController
     end
   end
 
-# Удаление категории (Delete). Запрос DELETE /categories/id
+  # Удаление категории (Delete). Запрос DELETE /categories/id
   # Добавляем в контроллер метод Destroy
   def destroy
     category = Category.find(params[:id])
@@ -55,8 +55,21 @@ class CategoriesController < ApplicationController
   end
 
 
-  # Другой метод find_category() готовит категорию для вывода в нужном формате - добавляет
- # product_count и убирает штампы времени.
+
+  # Далее создам методы по каждому пункту из постановки задачи.
+  #
+  # Создание нового продукта в категории (Create). Запрос POST /categories/3/products
+  # POST /categories/:category_id/products
+  def create
+    product = find_category(params[:category_id]).products.new(prod_params)
+    if product.save
+      product = find_product(product.id)
+      render json: product, status: 201
+    else
+      render json: {errors: product.errors}
+    end
+  end
+
 
 private
   def cat_params
